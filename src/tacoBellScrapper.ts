@@ -1,3 +1,4 @@
+// Originally made on ValTown
 import cheerio from "npm:cheerio";
 
 export default async function tacoBellNutritionScrapper(req): Promise<Response> {
