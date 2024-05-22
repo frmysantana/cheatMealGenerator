@@ -1,14 +1,16 @@
 {
   "name": "cheat-meal-generator",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Fremy Santana",
   "license": "ISC",
   "description": "",
+  "type": "module",
   "dependencies": {
-    "cheerio": "^1.0.0-rc.12"
+    "cheerio": "^1.0.0-rc.12",
+    "fastify": "^4.27.0"
   }
 }

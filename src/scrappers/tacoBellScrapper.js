@@ -1,7 +1,7 @@
 // Originally made on ValTown
-import cheerio from "npm:cheerio";
+import cheerio from "cheerio";
 
-export default async function tacoBellNutritionScrapper(req): Promise<Response> {
+export default async function tacoBellNutritionScrapper() { /** : Promise<Response> leaving for when I port to Typescript */
   const sourceUrl = `https://www.nutritionix.com/taco-bell/menu/premium`;
   const siteText = await fetch(sourceUrl);
   const $ = cheerio.load(await siteText.text());
