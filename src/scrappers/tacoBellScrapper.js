@@ -12,5 +12,7 @@ export default async function tacoBellNutritionScrapper() { /** : Promise<Respon
     return { name: name, calories: calories };
   }).toArray();
 
-  return Response.json({ items });
+  const sortedItems = items.sort((a, b) => b.calories - a.calories);
+
+  return Response.json({ sortedItems });
 }
