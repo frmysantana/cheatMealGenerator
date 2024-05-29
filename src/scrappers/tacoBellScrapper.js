@@ -21,19 +21,26 @@ export default async function tacoBellNutritionScrapper() { /** : Promise<Respon
    * FOUNTAIN BEVERAGES (30 OZ) - all end in " oz)"
    * */ 
 
-  // experimental code to sanitize data; plan is to find the indeces of excluded categories and filter elements based on if their index is in an excluded category
+  // experimental code to sanitize data; plan is to find the indeces of excluded categories and filter elements in reverse based on if their index is in an excluded category
   /**
-   * const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (32 oz)']
+   * const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (30 oz)']
   let all = Array.from(document.querySelectorAll(".tblCompare tbody tr"))
   let excludedIndeces = all.reduce((acc, curr, i) => {
-    if (curr.className === "subCategory") {
-        const isExcludedCategory = exclude.filter(e => curr.innerText.toLowerCase().includes(e.toLowerCase()))
+    if (curr.className == "subCategory") {
+        const name = curr.innerText
+        const isExcludedCategory = exclude.filter(e => name.toLowerCase().includes(e.toLowerCase()))
 
-        if (isExcludedCategory.length > 0 ) return i
+        if (isExcludedCategory.length > 0 ) {
+            acc.push({index: i, isExcluded: true, name })
+        } else {
+            acc.push({index: i, isExcluded: false, name })
+        }
     }
+
+    return acc
   }, [])
    */
-  const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (32 oz)']
+  const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (30 oz)']
   let all = Array.from(document.querySelectorAll(".tblCompare tbody tr"))
   let excludedIndeces = all.reduce((acc, curr, i) => {
     if (curr.className === "subCategory") {
