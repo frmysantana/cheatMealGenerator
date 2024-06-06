@@ -7,7 +7,14 @@ const fastify = Fastify({
 
 // Declare a route
 fastify.get('/', async function handler (request, reply) {
-  return tacoBell();
+  const { limit } = request.query
+
+  if (+limit > 0) {
+    return tacoBell(limit);
+  } else {
+    return new Error("No calorie limit was found.")
+  }
+  // return tacoBell();
 })
 
 // Run the server!

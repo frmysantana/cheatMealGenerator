@@ -1,6 +1,6 @@
 import cheerio from "cheerio";
 
-export default async function tacoBellNutritionScrapper() { /** : Promise<Response> leaving for when I port to Typescript */
+export default async function tacoBellNutritionScrapper(upperBound) { /** : Promise<Response> leaving for when I port to Typescript */
   const sourceUrl = `https://www.nutritionix.com/taco-bell/menu/premium`;
   const siteText = await fetch(sourceUrl);
   const $ = cheerio.load(await siteText.text());
@@ -40,15 +40,15 @@ export default async function tacoBellNutritionScrapper() { /** : Promise<Respon
     return acc
   }, [])
    */
-  const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (30 oz)']
-  let all = Array.from(document.querySelectorAll(".tblCompare tbody tr"))
-  let excludedIndeces = all.reduce((acc, curr, i) => {
-    if (curr.className === "subCategory") {
-        const isExcludedCategory = exclude.filter(e => curr.innerText.toLowerCase().includes(e.toLowerCase()))
+  // const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (30 oz)']
+  // let all = Array.from(document.querySelectorAll(".tblCompare tbody tr"))
+  // let excludedIndeces = all.reduce((acc, curr, i) => {
+  //   if (curr.className === "subCategory") {
+  //       const isExcludedCategory = exclude.filter(e => curr.innerText.toLowerCase().includes(e.toLowerCase()))
 
-        if (isExcludedCategory.length > 0 ) return i
-    }
-  }, [])
+  //       if (isExcludedCategory.length > 0 ) return i
+  //   }
+  // }, [])
   
   const items = $("tr.odd, tr.even").map((i, e) => {
     const name = $(e).find(".nmItem").html();
@@ -58,6 +58,16 @@ export default async function tacoBellNutritionScrapper() { /** : Promise<Respon
   }).toArray();
 
   const sortedItems = items.sort((a, b) => b.calories - a.calories);
+  let remaining = upperBound;
+  let selectedItems = [];
+  // let count = 0;
+  while (remaining > 0 && selectedItems.length <= 5) {
+    if (sortedItems[0].calories < remaining) {
+      remaining -= sortedItems[0].calories;
+      selectedItems.push(sortedItems[0]);
+      sortedItems.shift();
+    }
+  }
 
-  return Response.json({ sortedItems });
+  return Response.json({ selectedItems });
 }
