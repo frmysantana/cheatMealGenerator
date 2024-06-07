@@ -60,13 +60,15 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
   const sortedItems = items.sort((a, b) => b.calories - a.calories);
   let remaining = upperBound;
   let selectedItems = [];
-  // let count = 0;
-  while (remaining > 0 && selectedItems.length <= 5) {
+  let count = 0;
+  while (remaining > 0 && selectedItems.length <= 5 && sortedItems.length > 0) {
     if (sortedItems[0].calories < remaining) {
       remaining -= sortedItems[0].calories;
       selectedItems.push(sortedItems[0]);
-      sortedItems.shift();
     }
+
+    sortedItems.shift();
+    // console.log({remaining, selectedItemsLength: selectedItems.length, count});
   }
 
   return Response.json({ selectedItems });
