@@ -5,50 +5,43 @@ const fastify = Fastify({
   logger: true
 })
 
-// Declare a route
-fastify.get('/', async function handler (request, reply) {
-  // const { limit } = request.query
-
-  // if (+limit > 0) {
-    return tacoBell(1000);
-  // } else {
-  //   return new Error("No calorie limit was found.")
-  // }
-  // return tacoBell();
-})
-
-// fastify.route({
-//   method: 'GET',
-//   url: '/',
-//   schema: {
-    // request needs to have a querystring with a `name` parameter
-    // querystring: {
-    //   type: 'object',
-    //   properties: {
-    //       limit: { type: 'number'}
-    //   },
-    //   required: ['limit'],
-    // },
+fastify.route({
+  method: 'GET',
+  url: '/meals',
+  schema: {
+    querystring: {
+      type: 'object',
+      properties: {
+          limit: { type: 'number'}
+      },
+      required: ['limit'],
+    },
     // the response needs to be an object with an `hello` property of type 'string'
-    // response: {
-    //   200: {
-    //     type: 'object',
-    //     properties: {
-    //       meal: { type: 'string' }
-    //     }
-    //   }
-    // }
-  // },
+    response: {
+      200: {
+        type: 'array',
+        properties: {
+          meals: { 
+            type: 'object',
+            properties: {
+              name: { type: "string"},
+              calories: { type: "string"}
+            }
+          }
+        }
+      }
+    }
+  },
   // this function is executed for every request before the handler is executed
-  // preHandler: async (request, reply) => {
+  preHandler: async (request, reply) => {
     // E.g. check authentication
-//   },
-//   handler: async (request, reply) => {
-//     // const { limit } = request.query
-
-//     return tacoBell(1000);
-//   }
-// })
+  },
+  handler: async (request, reply) => {
+    const { limit } = request.query
+    console.log({limit})
+    return tacoBell(limit);
+  }
+})
 
 // Run the server!
 try {
