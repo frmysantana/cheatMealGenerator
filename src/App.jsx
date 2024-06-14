@@ -8,7 +8,13 @@ function App() {
   const submitLimit = () => {
     console.log(`should be submitting... ${calorieLimit}`)
     if (calorieLimit) {
-      fetch(`/meals?limit=${calorieLimit}`)
+      fetch(`http://127.0.0.1:3000/meals?limit=${calorieLimit}`, {
+        mode: "no-cors"
+      }).then(res => {
+        return res.json()
+      }).then(data => {
+        console.log({data});
+      }).catch(e => console.error({ message: e.message, stack: e.stack}))
     }
   }
 
