@@ -1,9 +1,15 @@
-import tacoBell from './scrappers/tacoBellScrapper.js';
 import Fastify from 'fastify';
+import cors from '@fastify/cors';
+import tacoBell from './scrappers/tacoBellScrapper.js';
 
 const fastify = Fastify({
   logger: true
 })
+
+await fastify.register(cors, { 
+  origin: 'http://localhost:5173',
+})
+
 
 fastify.route({
   method: 'GET',
@@ -16,7 +22,6 @@ fastify.route({
       },
       required: ['limit'],
     },
-    // the response needs to be an object with an `hello` property of type 'string'
     response: {
       200: {
         type: 'array',
