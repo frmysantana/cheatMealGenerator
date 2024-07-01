@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import './App.css'
+import Results from './Results';
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   const [ calorieLimit, setCalorieLimit ] = useState(100);
@@ -7,7 +9,11 @@ function App() {
   const [ results, setResults ] = useState([])
 
   const submitLimit = async () => {
-    if (calorieLimit) {
+    if (!calorieLimit) {
+      setError('Please set a calorie limit between 100 and 2000 Calories.')
+      return
+    } else if (calorieLimit > 100 && calorieLimit < 2000) {
+      setError('')
       const fetchConfig = {
         method: "GET",
       }
@@ -16,8 +22,15 @@ function App() {
 
       try {
         const data = await res.json()
-        
-        setResults(data.selectedItems)
+        const dataWithKeys = data.selectedItems.map(item => {
+          return {
+            id: uuidv4(),
+            name: item.name,
+            calories: item.calories
+          }
+        })
+
+        setResults(dataWithKeys)
       } catch (e) {
         setError(e.message);
       }
@@ -34,18 +47,14 @@ function App() {
             <input id="calorie-bound" type="number" min={100} max={2000} 
               onChange={(e) => {
                 const number = +e.target.value;
-                console.log({e})
                 if (number < 100) {
                   setError("Calorie limit must be at least 100.")
-                  return
                 }
 
                 if (number > 2000) {
                   setError("Calorie limit cannot exceed 2000.")
-                  return
                 }
 
-                setError('')
                 setCalorieLimit(number)
               }}
               value={calorieLimit}
@@ -55,24 +64,7 @@ function App() {
         <p>{error}</p>
         </div>
       </div>
-      { 
-        results && results.length > 0 ?
-        <div>
-          <ul>
-              {results.map(r => <>
-                <li>
-                  <p>
-                    {r.name}
-                  </p>
-                  <p>
-                    {r.calories}
-                  </p>
-                  </li>
-                </>)}
-            </ul> 
-        </div>
-        : null
-      }
+      <Results results={results} />
     </>
   )
 }
@@ -81,14 +73,12 @@ export default App
 
 /**
  * TODO:
- * 1. better UX for calorie input
- * 2. output results as table component
- * 3. clean up TacoBell data
- * 4. better styling
- * 5. convert cheero to jsdom
- * 6. set veet as middleware between frontend and fastify???
- * 7. convert everything to typescript for teh lulz
- * 8. include other restaurants and add restaurant selector component
- * 9. host???
- * 10. try re-implementing FE with svelte and then vue for experimenting
+ * clean up TacoBell data
+ * better styling
+ * convert cheero to jsdom
+ * set veet as middleware between frontend and fastify???
+ * convert everything to typescript for teh lulz
+ * include other restaurants and add restaurant selector component
+ * host???
+ * try re-implementing FE with svelte and then vue for experimenting
  */
