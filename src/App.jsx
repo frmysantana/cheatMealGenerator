@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import Results from './Results';
+import Error from './Error';
 import { v4 as uuidv4 } from 'uuid';
 
 function App() {
@@ -61,7 +62,7 @@ function App() {
             />
             <button onClick={submitLimit}>Generate</button>
           </div>
-        <p>{error}</p>
+          <Error message={error} />
         </div>
       </div>
       <Results results={results} />
@@ -73,6 +74,7 @@ export default App
 
 /**
  * TODO:
+ * try form actions
  * clean up TacoBell data
  * better styling
  * convert cheero to jsdom
