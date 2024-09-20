@@ -61,19 +61,21 @@ function App() {
         <p>Please enter an upper calorie bound for your cheat meal (the maximum is 2000).</p>
         <form className="calorie-form">
           <label>Calorie Limit</label>
-          <input id="calorie-bound" type="number" min={100} max={2000} 
-            onChange={handleOnChange}
-            /** figure out how to submit with enter key */
-            // onKeyUp={(e) => {
-            //   e.preventDefault();
-            //   if (e.code === "13" || e.key === "Enter") {
-            //     console.log('you hit the enter key!')
-            //   }
-            // }}
-            // onEnter={() => buttonRef.current.click()}
-            value={calorieLimit}
-          />
-          <button onClick={submitLimit}>Generate</button>
+          <div class="input-container">
+            <input id="calorie-bound" type="number" min={100} max={2000} 
+              onChange={handleOnChange}
+              /** figure out how to submit with enter key */
+              // onKeyUp={(e) => {
+              //   e.preventDefault();
+              //   if (e.code === "13" || e.key === "Enter") {
+              //     console.log('you hit the enter key!')
+              //   }
+              // }}
+              // onEnter={() => buttonRef.current.click()}
+              value={calorieLimit}
+            />
+            <button onClick={submitLimit}>Generate</button>
+          </div>
         </form>
         <Error message={error} />
       </div>
