@@ -3,10 +3,10 @@ import './App.css'
 import Results from './Results';
 import Error from './Error';
 import { v4 as uuidv4 } from 'uuid';
-import { useRef } from 'react';
+// import { useRef } from 'react';
 
 function App() {
-  const buttonRef = useRef(null);
+  // const buttonRef = useRef(null);
   const [ calorieLimit, setCalorieLimit ] = useState(100);
   const [ error, setError ] = useState('');
   const [ results, setResults ] = useState([])
@@ -24,20 +24,21 @@ function App() {
     setCalorieLimit(number)
   }
 
-  const submitLimit = async () => {
+  const submitLimit = async (e) => {
+    e.preventDefault();
+  
     if (!calorieLimit) {
       setError('Please set a calorie limit between 100 and 2000 Calories.')
       return
-    } else if (calorieLimit > 100 && calorieLimit < 2000) {
+    } else if (calorieLimit >= 100 && calorieLimit <= 2000) {
       setError('')
-      const fetchConfig = {
-        method: "GET",
-      }
-
-      const res = await fetch(`http://localhost:3000/meals?limit=${calorieLimit}`, fetchConfig)
 
       try {
-        const data = await res.json()
+        const fetchConfig = {
+          method: "GET",
+        }
+        const res = await fetch(`http://localhost:3000/meals?limit=${calorieLimit}`, fetchConfig).catch(e => console.error(`fetch error: ${e.message}`))
+        const data = await res.json().catch(e => console.error(`res.json error: ${e.message}`))
         const dataWithKeys = data.selectedItems.map(item => {
           return {
             id: uuidv4(),
@@ -72,7 +73,7 @@ function App() {
             // onEnter={() => buttonRef.current.click()}
             value={calorieLimit}
           />
-          <button onClick={submitLimit} ref={buttonRef}>Generate</button>
+          <button onClick={submitLimit}>Generate</button>
         </form>
         <Error message={error} />
       </div>
@@ -88,8 +89,8 @@ export default App
  * better styling
  * clean up TacoBell data
  * convert cheerio to jsdom
- * include other restaurants and add restaurant selector component
  * try form actions
+ * include other restaurants and add restaurant selector component
  * set veet as middleware between frontend and fastify???
  * convert everything to typescript for teh lulz
  * host???
