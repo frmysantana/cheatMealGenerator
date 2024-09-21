@@ -1,9 +1,9 @@
-const jsdom = require("jsdom");
+import { JSDOM } from "jsdom";
 
-async function tacoBellNutritionScrapper(upperBound) { /** : Promise<Response> leaving for when I port to Typescript */
+export default async function tacoBellNutritionScrapper(upperBound) { /** : Promise<Response> leaving for when I port to Typescript */
   const sourceUrl = `https://www.nutritionix.com/taco-bell/menu/premium`;
   const text = await fetch(sourceUrl).then(siteText => siteText.text());
-  const { document } = (new jsdom.JSDOM(text)).window;
+  const { document } = (new JSDOM(text)).window;
   // select for NEW, TACOS, BURRITOS, NACHOS, QUESADILLAS, SPECIALTIES, SIDES & SWEETS, CRAVINGS VALUE MENU, VEGGIE CRAVINGS
   // BREAKFAST
 
@@ -76,5 +76,3 @@ async function tacoBellNutritionScrapper(upperBound) { /** : Promise<Response> l
   console.log({remaining})
   return Response.json({ selectedItems });
 }
-
-module.exports = tacoBellNutritionScrapper;

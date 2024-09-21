@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "devFrontEnd": "vite",
-    "devBackEnd": "node ./server/src/server.js",
+    "devBackEnd": "node --experimental-vm-modules ./server/src/server.js",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
