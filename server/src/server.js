@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
-import tacoBell from './scrappers/tacoBellScrapper.js';
+import tacoBell from './scrappers/tacoBellScrapper.cjs';
 
 const fastify = Fastify({
   logger: true

@@ -1,9 +1,9 @@
-import cheerio from "cheerio";
+const jsdom = require("jsdom");
 
-export default async function tacoBellNutritionScrapper(upperBound) { /** : Promise<Response> leaving for when I port to Typescript */
+async function tacoBellNutritionScrapper(upperBound) { /** : Promise<Response> leaving for when I port to Typescript */
   const sourceUrl = `https://www.nutritionix.com/taco-bell/menu/premium`;
-  const siteText = await fetch(sourceUrl);
-  const $ = cheerio.load(await siteText.text());
+  const text = await fetch(sourceUrl).then(siteText => siteText.text());
+  const { document } = (new jsdom.JSDOM(text)).window;
   // select for NEW, TACOS, BURRITOS, NACHOS, QUESADILLAS, SPECIALTIES, SIDES & SWEETS, CRAVINGS VALUE MENU, VEGGIE CRAVINGS
   // BREAKFAST
 
@@ -50,12 +50,12 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
   //   }
   // }, [])
   
-  const items = $("tr.odd, tr.even").map((i, e) => {
-    const name = $(e).find(".nmItem").html();
-    const calories = $(e).find("[aria-label*='Calories']").html();
-
-    return { name: name, calories: calories };
-  }).toArray();
+  const items = Array.from(document.querySelectorAll("tr.odd, tr.even")).map((e) => {
+    const name = e.querySelector(".nmItem").textContent;
+    const calories = e.querySelector("[aria-label*='Calories']").textContent;
+  
+    return { name, calories }
+  })
 
   const sortedItems = items.sort((a, b) => b.calories - a.calories);
   let remaining = upperBound; // should have a lower bound of whatever the minimum-calorie food is after clean-up
@@ -76,3 +76,5 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
   console.log({remaining})
   return Response.json({ selectedItems });
 }
+
+module.exports = tacoBellNutritionScrapper;
