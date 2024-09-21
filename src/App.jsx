@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import Results from './Results';
 import Error from './Error';
 import { v4 as uuidv4 } from 'uuid';
@@ -61,7 +60,7 @@ function App() {
         <p>Please enter an upper calorie bound for your cheat meal (the maximum is 2000).</p>
         <form className="calorie-form">
           <label>Calorie Limit</label>
-          <div class="input-container">
+          <div className="input-container">
             <input id="calorie-bound" type="number" min={100} max={2000} 
               onChange={handleOnChange}
               /** figure out how to submit with enter key */
@@ -88,10 +87,9 @@ export default App
 
 /**
  * TODO:
- * better styling
+ * X try form actions - only canary version; would have to change versions X
  * clean up TacoBell data
  * convert cheerio to jsdom
- * try form actions
  * include other restaurants and add restaurant selector component
  * set veet as middleware between frontend and fastify???
  * convert everything to typescript for teh lulz
