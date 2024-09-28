@@ -8,8 +8,8 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
   // BREAKFAST
 
   /**
-   * All items - 419
-   * All items including titles - 436
+   * All items - 421
+   * All items including titles - 438
    * SKIP: drinks inside of NEW (16 oz, 20 oz),
    * Drinks - 14 items,
    * coffee/juice under Breakfast,
@@ -19,15 +19,14 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
    * FOUNTAIN BEVERAGES (16 OZ) - all end in " oz)"
    * FOUNTAIN BEVERAGES (20 OZ) - all end in " oz)"
    * FOUNTAIN BEVERAGES (30 OZ) - all end in " oz)"
+   * should have 126 remaining items
    * */ 
 
-  // experimental code to sanitize data; plan is to find the indeces of excluded categories and filter elements in reverse based on if their index is in an excluded category
-  /**
-   * const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (30 oz)']
+  const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (30 oz)']
   let all = Array.from(document.querySelectorAll(".tblCompare tbody tr"))
-  let excludedIndeces = all.reduce((acc, curr, i) => {
+  let excludedCategories = all.reduce((acc, curr, i) => {
     if (curr.className == "subCategory") {
-        const name = curr.innerText
+        const name = curr.textContent
         const isExcludedCategory = exclude.filter(e => name.toLowerCase().includes(e.toLowerCase()))
 
         if (isExcludedCategory.length > 0 ) {
@@ -38,11 +37,22 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
     }
 
     return acc
-  }, [])
-   */
+  }, []).reverse()
+
+  const remainingItems = all.filter((item, ind) => {
+    if (item.className.includes("subCategory")) {
+      return false
+    }
+
+    const subCategory = excludedCategories.find((exc) => {
+        return ind > exc.index
+    })
+    console.log({subCategory})
+    return !subCategory.isExcluded
+  })
   // const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (30 oz)']
   // let all = Array.from(document.querySelectorAll(".tblCompare tbody tr"))
-  // let excludedIndeces = all.reduce((acc, curr, i) => {
+  // let excludedCategories = all.reduce((acc, curr, i) => {
   //   if (curr.className === "subCategory") {
   //       const isExcludedCategory = exclude.filter(e => curr.innerText.toLowerCase().includes(e.toLowerCase()))
 
@@ -50,7 +60,7 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
   //   }
   // }, [])
   
-  const items = Array.from(document.querySelectorAll("tr.odd, tr.even")).map((e) => {
+  const items = remainingItems.map((e) => {
     const name = e.querySelector(".nmItem").textContent;
     const calories = e.querySelector("[aria-label*='Calories']").textContent;
   
@@ -73,6 +83,6 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
       selectedItems.push(item);
     }
   })
-  console.log({remaining})
+
   return Response.json({ selectedItems });
 }
