@@ -19,7 +19,7 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
    * FOUNTAIN BEVERAGES (16 OZ) - all end in " oz)"
    * FOUNTAIN BEVERAGES (20 OZ) - all end in " oz)"
    * FOUNTAIN BEVERAGES (30 OZ) - all end in " oz)"
-   * should have 126 remaining items
+   * should have 115 remaining items
    * */ 
 
   const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (30 oz)']
@@ -40,6 +40,8 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
   }, []).reverse()
 
   const remainingItems = all.filter((item, ind) => {
+    // exclude the rows that are just the category name
+    // and the rows within the excluded categories
     if (item.className.includes("subCategory")) {
       return false
     }
@@ -47,18 +49,14 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
     const subCategory = excludedCategories.find((exc) => {
         return ind > exc.index
     })
-    console.log({subCategory})
-    return !subCategory.isExcluded
-  })
-  // const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (30 oz)']
-  // let all = Array.from(document.querySelectorAll(".tblCompare tbody tr"))
-  // let excludedCategories = all.reduce((acc, curr, i) => {
-  //   if (curr.className === "subCategory") {
-  //       const isExcludedCategory = exclude.filter(e => curr.innerText.toLowerCase().includes(e.toLowerCase()))
 
-  //       if (isExcludedCategory.length > 0 ) return i
-  //   }
-  // }, [])
+    return !subCategory.isExcluded
+  }).filter((item) => {
+    const name = item.querySelector(".nmItem").textContent.toLowerCase();
+    const excludedNames = ['oz)', 'coffee', 'creamer', 'juice'];
+  
+    return !(excludedNames.some((n) => name.includes(n)));
+  })
   
   const items = remainingItems.map((e) => {
     const name = e.querySelector(".nmItem").textContent;
