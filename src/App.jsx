@@ -89,7 +89,7 @@ export default App
  * TODO:
  * X try form actions - only canary version; would have to change versions X
  * X convert cheerio to jsdom X
- * clean up TacoBell data
+ * X clean up TacoBell data X
  * include other restaurants and add restaurant selector component
  * resolve punycode deprecation issue (maybe switch node to LTS?)
  * set veet as middleware between frontend and fastify???
