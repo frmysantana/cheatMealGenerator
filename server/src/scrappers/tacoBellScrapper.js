@@ -4,23 +4,6 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
   const sourceUrl = `https://www.nutritionix.com/taco-bell/menu/premium`;
   const text = await fetch(sourceUrl).then(siteText => siteText.text());
   const { document } = (new JSDOM(text)).window;
-  // select for NEW, TACOS, BURRITOS, NACHOS, QUESADILLAS, SPECIALTIES, SIDES & SWEETS, CRAVINGS VALUE MENU, VEGGIE CRAVINGS
-  // BREAKFAST
-
-  /**
-   * All items - 421
-   * All items including titles - 438
-   * SKIP: drinks inside of NEW (16 oz, 20 oz),
-   * Drinks - 14 items,
-   * coffee/juice under Breakfast,
-   * Cantina menu,
-   * CANTINA BEER, WINE AND SPIRITS - all end in " oz)"
-   * LAS VEGAS CANTINA MENU - all end in " oz)" or " - LV"
-   * FOUNTAIN BEVERAGES (16 OZ) - all end in " oz)"
-   * FOUNTAIN BEVERAGES (20 OZ) - all end in " oz)"
-   * FOUNTAIN BEVERAGES (30 OZ) - all end in " oz)"
-   * should have 115 remaining items
-   * */ 
 
   const exclude = ['drinks', 'cantina menu', 'cantina beer, wine and spirits', 'las vegas cantina menu', 'fountain beverages (16 oz)', 'fountain beverages (20 oz)', 'fountain beverages (30 oz)']
   let all = Array.from(document.querySelectorAll(".tblCompare tbody tr"))
@@ -49,26 +32,31 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
     const subCategory = excludedCategories.find((exc) => {
         return ind > exc.index
     })
-
-    return !subCategory.isExcluded
-  }).filter((item) => {
+    
+    if (subCategory.isExcluded) {
+      return false
+    }
+    
     const name = item.querySelector(".nmItem").textContent.toLowerCase();
     const excludedNames = ['oz)', 'coffee', 'creamer', 'juice'];
-  
-    return !(excludedNames.some((n) => name.includes(n)));
+
+    if ( excludedNames.some((n) => name.includes(n)) ) {
+      return false
+    }
+
+    return true
   })
   
   const items = remainingItems.map((e) => {
     const name = e.querySelector(".nmItem").textContent;
     const calories = e.querySelector("[aria-label*='Calories']").textContent;
-  
+
     return { name, calories }
   })
 
   const sortedItems = items.sort((a, b) => b.calories - a.calories);
-  let remaining = upperBound; // should have a lower bound of whatever the minimum-calorie food is after clean-up
+  let remaining = upperBound;
   let selectedItems = [];
-  let count = 0;
   sortedItems.forEach(item => {
     if (
       selectedItems.length <= 5 && 
@@ -76,7 +64,6 @@ export default async function tacoBellNutritionScrapper(upperBound) { /** : Prom
       item.calories > 0 &&
       item.calories < remaining
     ) {
-      console.log(item);
       remaining -= item.calories;
       selectedItems.push(item);
     }
