@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import tacoBell from './scrappers/tacoBellScrapper.js';
+import mcDonalds from './scrappers/mcDonalds.js';
 
 const fastify = Fastify({
   logger: true
@@ -43,8 +44,8 @@ fastify.route({
   },
   handler: async (request, reply) => {
     const { limit } = request.query
-    console.log({limit})
-    return tacoBell(limit);
+
+    return mcDonalds(limit);
   }
 })
 
