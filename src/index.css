@@ -68,12 +68,16 @@ h1 {
   font-size: 1.5rem;
 }
 
-.calorie-form {
+.meal-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 1rem;
   padding: 2rem;
+}
+
+select {
+  padding: 1rem;
 }
 
 .input-container {
@@ -82,7 +86,7 @@ h1 {
   width: 100%;
 }
 
-.calorie-form input {
+.meal-form input {
   padding: 1rem;
   min-width: 50px;
   border: 1px solid #1a1a1a;
