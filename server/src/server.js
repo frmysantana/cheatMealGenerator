@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import tacoBell from './scrappers/tacoBellScrapper.js';
 import mcDonalds from './scrappers/mcDonalds.js';
+import { restaurantOptions } from '../../utils/constants.js';
 
 const fastify = Fastify({
   logger: true
@@ -19,9 +20,10 @@ fastify.route({
     querystring: {
       type: 'object',
       properties: {
-          limit: { type: 'number'}
+          limit: { type: 'number'},
+          restaurant: { type: 'string', enum: Object.values(restaurantOptions) }
       },
-      required: ['limit'],
+      required: ['limit', 'restaurant'],
     },
     response: {
       200: {
@@ -43,9 +45,17 @@ fastify.route({
     // E.g. check authentication
   },
   handler: async (request, reply) => {
-    const { limit } = request.query
+    const { limit, restaurant } = request.query
 
-    return mcDonalds(limit);
+    console.log({restaurant, options: Object.values(restaurantOptions)})
+    switch (restaurant) {
+      case restaurantOptions.TACOBELL:
+        return tacoBell(limit);
+      case restaurantOptions.MCDONALDS:
+        return mcDonalds(limit);
+      default:
+        throw Error(`Invalid restaurant (or not supported) ${restaurant}`)
+    }
   }
 })
 
