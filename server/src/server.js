@@ -47,7 +47,6 @@ fastify.route({
   handler: async (request, reply) => {
     const { limit, restaurant } = request.query
 
-    console.log({restaurant, options: Object.values(restaurantOptions)})
     switch (restaurant) {
       case restaurantOptions.TACOBELL:
         return tacoBell(limit);

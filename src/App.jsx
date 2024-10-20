@@ -5,10 +5,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { restaurantOptions } from '../utils/constants';
 
 function App() {
-  const [ calorieLimit, setCalorieLimit ] = useState(100);
-  const [ restaurant, setRestaurant ] = useState('');
-  const [ error, setError ] = useState('');
-  const [ results, setResults ] = useState([])
+  const [calorieLimit, setCalorieLimit] = useState(100);
+  const [restaurant, setRestaurant] = useState('');
+  const [error, setError] = useState('');
+  const [results, setResults] = useState([])
 
   const handleCalorieChange = (e) => {
     const number = +e.target.value;
@@ -35,7 +35,7 @@ function App() {
 
   const submitParams = async (e) => {
     e.preventDefault();
-  
+
     if (!calorieLimit) {
       setError('Please set a calorie limit between 100 and 2000 Calories.')
       return
@@ -69,29 +69,27 @@ function App() {
     <>
       <h1>Cheat Meal Generator</h1>
       <div className="card">
-        <p>Please enter an upper calorie bound for your cheat meal (the maximum is 2000).</p>
+        <p>
+          Please select a restaurant and enter an upper calorie bound for your cheat meal (the minimum is 100 and maximum is 2000).
+        </p>
         <form className="meal-form">
-            <label for="restaurant">Restaurant</label>
-            <select onChange={handleRestaurantChange} id="restaurant">
-              <option value={restaurantOptions.TACOBELL}>Taco Bell</option>
-              <option value={restaurantOptions.MCDONALDS}>McDonald's</option>
-            </select>
-          <label for="calorie-bound">Calorie Limit</label>
-          <div className="input-container">
-            <input id="calorie-bound" type="number" min={100} max={2000} 
-              onChange={handleCalorieChange}
-              /** figure out how to submit with enter key */
-              // onKeyUp={(e) => {
-              //   e.preventDefault();
-              //   if (e.code === "13" || e.key === "Enter") {
-              //     console.log('you hit the enter key!')
-              //   }
-              // }}
-              // onEnter={() => buttonRef.current.click()}
-              value={calorieLimit}
-            />
-            <button onClick={submitParams}>Generate</button>
+          <div className="input-row">
+            <div className="input-container">
+              <label for="restaurant">Restaurant</label>
+              <select onChange={handleRestaurantChange} id="restaurant">
+                <option value={restaurantOptions.TACOBELL}>Taco Bell</option>
+                <option value={restaurantOptions.MCDONALDS}>McDonald's</option>
+              </select>
+            </div>
+            <div  className="input-container"> 
+              <label for="calorie-bound">Calorie Limit</label>
+              <input id="calorie-bound" type="number" min={100} max={2000}
+                onChange={handleCalorieChange}
+                value={calorieLimit}
+              />
+            </div>
           </div>
+          <button onClick={submitParams}>Generate</button>
         </form>
         <Error message={error} />
       </div>
@@ -107,7 +105,7 @@ export default App
  * X try form actions - only canary version; would have to change versions X
  * X convert cheerio to jsdom X
  * X clean up TacoBell data X
- * include other restaurants and add restaurant selector component
+ * X include other restaurants and add restaurant selector component
  * resolve punycode deprecation issue (maybe switch node to LTS?)
  * set veet as middleware between frontend and fastify???
  * convert everything to typescript for teh lulz
