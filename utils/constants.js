@@ -1,7 +1,19 @@
 export const restaurantOptions = {
-    MCDONALDS: 'mcdonalds',
-    TACOBELL: 'tacobell',
-    WENDYS: 'wendys',
-    // BURGER_KING: 'burgerking',
+    MCDONALDS: {
+        value: 'mcdonalds',
+        label: 'McDonald\'s'
+    },
+    TACOBELL: {
+        value: 'tacobell',
+        label: 'Taco Bell'
+    },
+    WENDYS: {
+        value: 'wendys',
+        label: 'Wendys'
+    },
+    BURGER_KING: {
+        value: 'burgerking',
+        label: "Burger King"
+    },
     // POPEYES: 'popeyes',
 }

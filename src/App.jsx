@@ -26,7 +26,7 @@ function App() {
   const handleRestaurantChange = (e) => {
     const restaurant = e.target.value;
 
-    if (Object.values(restaurantOptions).includes(restaurant)) {
+    if (Object.values(restaurantOptions).map(opt => opt.value).includes(restaurant)) {
       setRestaurant(restaurant)
     } else {
       setError('Please select a supported restaurant. The options for now are McDonald\'s and Taco Bell.')
@@ -41,7 +41,8 @@ function App() {
       return
     } else if (!restaurant) {
       setError('Please select a supported restaurant. The options for now are McDonald\'s and Taco Bell.')
-    } else if (calorieLimit >= 100 && calorieLimit <= 2000 && Object.values(restaurantOptions).includes(restaurant)) {
+    } else if (calorieLimit >= 100 && calorieLimit <= 2000 && Object.values(restaurantOptions).map(opt => opt.value).includes(restaurant)) {
+      // TODO: does this 2nd validation actually help?
       setError('')
 
       try {
@@ -75,15 +76,14 @@ function App() {
         <form className="meal-form">
           <div className="input-row">
             <div className="input-container">
-              <label for="restaurant">Restaurant</label>
+              <label htmlFor="restaurant">Restaurant</label>
               <select onChange={handleRestaurantChange} id="restaurant">
-                {Object.values(restaurantOptions).map(restaurant => <option value={restaurant}>{restaurant}</option>)}
-                {/* <option value={restaurantOptions.TACOBELL}>Taco Bell</option>
-                <option value={restaurantOptions.MCDONALDS}>McDonald's</option> */}
+                <option value="">Select a restaurant</option>
+                {Object.values(restaurantOptions).map(restaurantConfig => <option value={restaurantConfig.value}>{restaurantConfig.label}</option>)}
               </select>
             </div>
             <div  className="input-container"> 
-              <label for="calorie-bound">Calorie Limit</label>
+              <label htmlFor="calorie-bound">Calorie Limit</label>
               <input id="calorie-bound" type="number" min={100} max={2000}
                 onChange={handleCalorieChange}
                 value={calorieLimit}
@@ -107,12 +107,18 @@ export default App
  * X convert cheerio to jsdom X
  * X clean up TacoBell data X
  * X include other restaurants and add restaurant selector component
+ * X - add Wendy's
+ * - add Burger King
+ * - add Popeye's
+ * support multiple error messages
+ * ally error format
+ * show unsupported restaurant server error on frontend
  * resolve punycode deprecation issue (maybe switch node to LTS?)
- * - add Wendy's & Burger King
  * adjust folder structure
  * set veet as middleware between frontend and fastify???
  * convert everything to typescript for teh lulz
  * incorporate SQLite database and change scrappers to run on cronjob
+ *  - classes for scrappers?
  *  - Drizzle for ORM?
  * host???
  * try re-implementing FE with svelte and then vue for experimenting

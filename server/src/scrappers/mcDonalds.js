@@ -40,6 +40,9 @@ export default async function mcDonaldsNutritionScrapper(upperBound) {
         return true
     })
 
+    /**
+     * should have 72 items
+     */
     const items = remainingItems.map((e) => {
         const name = e.querySelector('.nmItem').textContent
         const calories = e.querySelector("[aria-label*='Calories']").textContent.replace(',', '')

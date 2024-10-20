@@ -23,7 +23,7 @@ fastify.route({
       type: 'object',
       properties: {
           limit: { type: 'number'},
-          restaurant: { type: 'string', enum: Object.values(restaurantOptions) }
+          restaurant: { type: 'string', enum: Object.values(restaurantOptions).map(opt => opt.value)}
       },
       required: ['limit', 'restaurant'],
     },
@@ -50,11 +50,11 @@ fastify.route({
     const { limit, restaurant } = request.query
 
     switch (restaurant) {
-      case restaurantOptions.TACOBELL:
+      case restaurantOptions.TACOBELL.value:
         return tacoBell(limit);
-      case restaurantOptions.MCDONALDS:
+      case restaurantOptions.MCDONALDS.value:
         return mcDonalds(limit);
-      case restaurantOptions.WENDYS:
+      case restaurantOptions.WENDYS.value:
         return wendys(limit);
       default:
         throw Error(`Invalid restaurant (or not supported) ${restaurant}`)
