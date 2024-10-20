@@ -112,7 +112,6 @@ select {
 }
 
 table {
-  /* width: 100%; */
   border: 0.0625rem solid #1a1a1a;
   border-radius: 0.25rem;
 }

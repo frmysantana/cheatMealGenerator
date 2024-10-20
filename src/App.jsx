@@ -77,8 +77,9 @@ function App() {
             <div className="input-container">
               <label for="restaurant">Restaurant</label>
               <select onChange={handleRestaurantChange} id="restaurant">
-                <option value={restaurantOptions.TACOBELL}>Taco Bell</option>
-                <option value={restaurantOptions.MCDONALDS}>McDonald's</option>
+                {Object.values(restaurantOptions).map(restaurant => <option value={restaurant}>{restaurant}</option>)}
+                {/* <option value={restaurantOptions.TACOBELL}>Taco Bell</option>
+                <option value={restaurantOptions.MCDONALDS}>McDonald's</option> */}
               </select>
             </div>
             <div  className="input-container"> 
@@ -107,8 +108,12 @@ export default App
  * X clean up TacoBell data X
  * X include other restaurants and add restaurant selector component
  * resolve punycode deprecation issue (maybe switch node to LTS?)
+ * - add Wendy's & Burger King
+ * adjust folder structure
  * set veet as middleware between frontend and fastify???
  * convert everything to typescript for teh lulz
+ * incorporate SQLite database and change scrappers to run on cronjob
+ *  - Drizzle for ORM?
  * host???
  * try re-implementing FE with svelte and then vue for experimenting
  */
