@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 
-export default async function wendysNutritionScrapper(upperBound) { /** : Promise<Response> leaving for when I port to Typescript */
+export default async function wendysNutritionScrapper() { /** : Promise<Response> leaving for when I port to Typescript */
   const sourceUrl = `https://www.nutritionix.com/wendys/menu/premium`;
   const text = await fetch(sourceUrl).then(siteText => siteText.text());
   const { document } = (new JSDOM(text)).window;
@@ -50,20 +50,5 @@ export default async function wendysNutritionScrapper(upperBound) { /** : Promis
     return { name, calories }
   })
 
-  const sortedItems = items.sort((a, b) => b.calories - a.calories);
-  let remaining = upperBound;
-  let selectedItems = [];
-  sortedItems.forEach(item => {
-    if (
-      selectedItems.length <= 5 &&
-      remaining > 0 &&
-      item.calories > 0 &&
-      item.calories < remaining
-    ) {
-      remaining -= item.calories;
-      selectedItems.push(item);
-    }
-  })
-
-  return Response.json({ selectedItems });
+  return items;
 }

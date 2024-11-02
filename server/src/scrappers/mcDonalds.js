@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 
-export default async function mcDonaldsNutritionScrapper(upperBound) {
+export default async function mcDonaldsNutritionScrapper() {
     const sourceUrl = `https://www.nutritionix.com/mcdonalds/menu/premium`;
     const text = await fetch(sourceUrl).then(siteText => siteText.text());
     const { document } = (new JSDOM(text)).window;
@@ -50,20 +50,5 @@ export default async function mcDonaldsNutritionScrapper(upperBound) {
         return { name, calories }
     })
 
-    const sortedItems = items.sort((a, b) => Number(b.calories) - Number(a.calories));
-    let remaining = upperBound;
-    let selectedItems = [];
-    sortedItems.forEach(item => {
-        if (
-            selectedItems.length <= 5 &&
-            remaining > 0 &&
-            item.calories > 0 &&
-            item.calories < remaining
-        ) {
-            remaining -= item.calories;
-            selectedItems.push(item);
-        }
-    })
-
-    return Response.json({ selectedItems })
+    return items
 }

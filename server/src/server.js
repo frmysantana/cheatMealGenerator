@@ -1,8 +1,6 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
-import tacoBell from './scrappers/tacoBellScrapper.js';
-import mcDonalds from './scrappers/mcDonalds.js';
-import wendys from './scrappers/wendys.js';
+import meals from './meals.js';
 
 import { restaurantOptions } from '../../utils/constants.js';
 
@@ -51,11 +49,11 @@ fastify.route({
 
     switch (restaurant) {
       case restaurantOptions.TACOBELL.value:
-        return tacoBell(limit);
+        return meals(restaurant, limit);
       case restaurantOptions.MCDONALDS.value:
-        return mcDonalds(limit);
+        return meals(restaurant, limit);
       case restaurantOptions.WENDYS.value:
-        return wendys(limit);
+        return meals(restaurant, limit);
       default:
         throw Error(`Invalid restaurant (or not supported) ${restaurant}`)
     }
