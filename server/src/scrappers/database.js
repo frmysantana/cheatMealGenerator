@@ -5,32 +5,50 @@ import wendys from './wendys.js';
 import { restaurantOptions } from '../../../utils/constants.js';
 import { dbPath } from './constants.js';
 
+const errors = {
+  ALREADY_EXISTS: 'table foods already exists',
+}
+
 const database = new DatabaseSync(`${dbPath}`);
 
-database.exec(`
-  CREATE TABLE foods(
-    id INTEGER PRIMARY KEY ASC,
-    restaurant TEXT,
-    name TEXT,
-    calories INTEGER
-  ) STRICT
-`);
+const insertFoods = async (insertStm) => {
+  const [mDItems, tbItems, wItems] = await Promise.all([
+    mcDonalds(), 
+    tacoBell(),
+    wendys()
+  ])
 
-const insert = database.prepare('INSERT INTO foods (restaurant, name, calories) VALUES (?, ?, ?)');
+  mDItems.forEach(item => {
+    insertStm.run(restaurantOptions.MCDONALDS.value, item.name, +item.calories);
+  })
+  tbItems.forEach(item => {
+    insertStm.run(restaurantOptions.TACOBELL.value, item.name, +item.calories);
+  })
+  wItems.forEach(item => {
+    insertStm.run(restaurantOptions.WENDYS.value, item.name, +item.calories);
+  })
+}
 
-const mDItems = await mcDonalds()
-mDItems.forEach(item => {
-  insert.run(restaurantOptions.MCDONALDS.value, item.name, +item.calories);
-})
+try {
+  database.exec(`
+    CREATE TABLE foods(
+      restaurant TEXT,
+      name TEXT,
+      calories INTEGER,
+      PRIMARY KEY (restaurant, name)
+    ) STRICT
+  `);
 
-const tbItems = await tacoBell()
-tbItems.forEach(item => {
-  insert.run(restaurantOptions.TACOBELL.value, item.name, +item.calories);
-})
+  const insert = database.prepare('INSERT INTO foods (restaurant, name, calories) VALUES (?, ?, ?)');
+  await insertFoods(insert)
+} catch (e) {
+  if (e.message != errors.ALREADY_EXISTS) {
+    throw e
+  }
 
-const wItems = await wendys()
-wItems.forEach(item => {
-  insert.run(restaurantOptions.WENDYS.value, item.name, +item.calories);
-})
+  // foods already exists and only has to be updated with potentially new values
+  const insert = database.prepare('INSERT OR REPLACE INTO foods (restaurant, name, calories) VALUES (?, ?, ?);');
+  await insertFoods(insert)
+}
 
 database.close();

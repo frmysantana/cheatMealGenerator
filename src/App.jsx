@@ -78,7 +78,7 @@ function App() {
             <div className="input-container">
               <label htmlFor="restaurant">Restaurant</label>
               <select onChange={handleRestaurantChange} id="restaurant">
-                <option value="">Select a restaurant</option>
+                <option value="">Select one</option>
                 {Object.values(restaurantOptions).map(restaurantConfig => <option value={restaurantConfig.value}>{restaurantConfig.label}</option>)}
               </select>
             </div>
@@ -117,10 +117,15 @@ export default App
  * adjust folder structure
  * set veet as middleware between frontend and fastify???
  * convert everything to typescript for teh lulz
- * incorporate SQLite database and change scrappers to run on cronjob
+ * X incorporate SQLite database and 
+ * X - Drizzle for ORM? overkill - no need
+ * change scrappers to run on cronjob
  *  - classes for scrappers?
- *  - Drizzle for ORM?
+ * add tests
  * host???
  * try re-implementing FE with svelte and then vue for experimenting
+ * 
+ * - authentication
+ * - analyze menu from picture
  */
 
