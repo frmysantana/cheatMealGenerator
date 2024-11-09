@@ -108,24 +108,24 @@ export default App
  * X clean up TacoBell data X
  * X include other restaurants and add restaurant selector component
  * X - add Wendy's
- * - add Burger King
- * - add Popeye's
+ * X - add Burger King
+ * X - add Popeye's
+ * X - classes for scrappers?
+ * X incorporate SQLite database and 
+ * X - Drizzle for ORM? overkill - no need
  * support multiple error messages
+ * use path to set db location
  * ally error format
  * show unsupported restaurant server error on frontend
- * resolve punycode deprecation issue (maybe switch node to LTS?)
  * adjust folder structure
  * set veet as middleware between frontend and fastify???
  * convert everything to typescript for teh lulz
- * X incorporate SQLite database and 
- * X - Drizzle for ORM? overkill - no need
  * change scrappers to run on cronjob
- *  - classes for scrappers?
  * add tests
  * host???
  * try re-implementing FE with svelte and then vue for experimenting
+ * resolve punycode deprecation issue (maybe switch node to LTS?)
  * 
  * - authentication
  * - analyze menu from picture
  */
-

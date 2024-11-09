@@ -54,6 +54,10 @@ fastify.route({
         return meals(restaurant, limit);
       case restaurantOptions.WENDYS.value:
         return meals(restaurant, limit);
+      case restaurantOptions.BURGER_KING.value:
+        return meals(restaurant, limit);
+      case restaurantOptions.POPEYES.value:
+        return meals(restaurant, limit);
       default:
         throw Error(`Invalid restaurant (or not supported) ${restaurant}`)
     }

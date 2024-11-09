@@ -15,5 +15,8 @@ export const restaurantOptions = {
         value: 'burgerking',
         label: "Burger King"
     },
-    // POPEYES: 'popeyes',
+    POPEYES: {
+        value: 'popeyes',
+        label: "Popeyes"
+    },
 }
