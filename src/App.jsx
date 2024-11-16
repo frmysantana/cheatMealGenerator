@@ -7,17 +7,37 @@ import { restaurantOptions } from '../utils/constants';
 function App() {
   const [calorieLimit, setCalorieLimit] = useState(100);
   const [restaurant, setRestaurant] = useState('');
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState([]);
   const [results, setResults] = useState([])
 
+  const appendNewError = (newError) => {
+    const newErrors = errors.filter(e => e.type !== newError.type)
+    newErrors.push(newError)
+
+    return newErrors
+  }
+
+  const removeError = (type) => {
+    return errors.filter(e => e.type !== type)
+  }
   const handleCalorieChange = (e) => {
     const number = +e.target.value;
     if (number < 100) {
-      setError("Calorie limit must be at least 100.")
+      setErrors(appendNewError({
+        type: "CALORIE_INPUT",
+        message: "Calorie limit must be at least 100."
+      }))
     }
 
     if (number > 2000) {
-      setError("Calorie limit cannot exceed 2000.")
+      setErrors(appendNewError({
+        type: "CALORIE_INPUT",
+        message: "Calorie limit must be less than 2000."
+      }))
+    } 
+    
+    if (number >= 100 && number <= 2000) {
+      setErrors(removeError('CALORIE_INPUT'))
     }
 
     setCalorieLimit(number)
@@ -25,11 +45,21 @@ function App() {
 
   const handleRestaurantChange = (e) => {
     const restaurant = e.target.value;
+    const isAvailableOption = Object.values(restaurantOptions).map(opt => opt.value).includes(restaurant)
+    
+    if (isAvailableOption || restaurant == '') {
+      setRestaurant(() => {
+        return restaurant
+      })
+    }
 
-    if (Object.values(restaurantOptions).map(opt => opt.value).includes(restaurant)) {
-      setRestaurant(restaurant)
+    if (isAvailableOption) {
+      setErrors(removeError("RESTAURANT_SELECTION"))
     } else {
-      setError('Please select a supported restaurant. The options for now are McDonald\'s and Taco Bell.')
+      setErrors(appendNewError({
+        type: "RESTAURANT_SELECTION",
+        message: 'Please select a supported restaurant.'
+      }))
     }
   }
 
@@ -37,31 +67,49 @@ function App() {
     e.preventDefault();
 
     if (!calorieLimit) {
-      setError('Please set a calorie limit between 100 and 2000 Calories.')
-      return
+      setErrors(appendNewError({
+        type: "CALORIE_INPUT",
+        message: 'Please set a calorie limit between 100 and 2000 Calories.'
+      }))
     } else if (!restaurant) {
-      setError('Please select a supported restaurant. The options for now are McDonald\'s and Taco Bell.')
-    } else if (calorieLimit >= 100 && calorieLimit <= 2000 && Object.values(restaurantOptions).map(opt => opt.value).includes(restaurant)) {
-      // TODO: does this 2nd validation actually help?
-      setError('')
+      setErrors(appendNewError({
+        type: "RESTAURANT_SELECTION",
+        message: 'Please select a supported restaurant.'
+      }))
+    } else {
+      setErrors([])
 
       try {
         const fetchConfig = {
           method: "GET",
         }
         const res = await fetch(`http://localhost:3000/meals?restaurant=${restaurant}&limit=${calorieLimit}`, fetchConfig).catch(e => console.error(`fetch error: ${e.message}`))
-        const data = await res.json().catch(e => console.error(`res.json error: ${e.message}`))
-        const dataWithKeys = data.selectedItems.map(item => {
-          return {
-            id: uuidv4(),
-            name: item.name,
-            calories: item.calories
+        const data = await res.json()
+        
+        if (!res.ok) {
+          if (data.errorMessage.indexOf('Invalid restaurant (or not supported)') > -1) {
+            setErrors(appendNewError({
+              type: 'BACKEND_NOT_SUPPORTED',
+              message: data.errorMessage
+            }))
+          } else {
+            throw Error(data)
           }
-        })
-
-        setResults(dataWithKeys)
+        } else {
+          const dataWithKeys = data.selectedItems.map(item => {
+            return {
+              id: uuidv4(),
+              name: item.name,
+              calories: item.calories
+            }
+          })
+  
+          setErrors(removeError('BACKEND_NOT_SUPPORTED'))
+          setResults(dataWithKeys)
+        }
       } catch (e) {
-        setError(e.message);
+        // TODO: write logger
+        console.error('try/catch error', {message: e.message})
       }
     }
   }
@@ -77,9 +125,9 @@ function App() {
           <div className="input-row">
             <div className="input-container">
               <label htmlFor="restaurant">Restaurant</label>
-              <select onChange={handleRestaurantChange} id="restaurant">
+              <select onChange={handleRestaurantChange} id="restaurant" value={restaurant}>
                 <option value="">Select one</option>
-                {Object.values(restaurantOptions).map(restaurantConfig => <option value={restaurantConfig.value}>{restaurantConfig.label}</option>)}
+                {Object.values(restaurantOptions).map(restaurantConfig => <option key={uuidv4()} value={restaurantConfig.value}>{restaurantConfig.label}</option>)}
               </select>
             </div>
             <div  className="input-container"> 
@@ -92,7 +140,7 @@ function App() {
           </div>
           <button onClick={submitParams}>Generate</button>
         </form>
-        <Error message={error} />
+        <Error messages={errors} />
       </div>
       <Results results={results} />
     </>
@@ -113,16 +161,20 @@ export default App
  * X - classes for scrappers?
  * X incorporate SQLite database and 
  * X - Drizzle for ORM? overkill - no need
- * support multiple error messages
- * use path to set db location
+ * X use path to set db location
+ * X support multiple error messages
+ * X show unsupported restaurant server error on frontend
  * ally error format
- * show unsupported restaurant server error on frontend
  * adjust folder structure
  * set veet as middleware between frontend and fastify???
  * convert everything to typescript for teh lulz
  * change scrappers to run on cronjob
  * add tests
  * host???
+ * 
+ * 
+ * 
+ * 
  * try re-implementing FE with svelte and then vue for experimenting
  * resolve punycode deprecation issue (maybe switch node to LTS?)
  * 

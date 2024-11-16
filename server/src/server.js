@@ -59,7 +59,7 @@ fastify.route({
       case restaurantOptions.POPEYES.value:
         return meals(restaurant, limit);
       default:
-        throw Error(`Invalid restaurant (or not supported) ${restaurant}`)
+        return reply.status(400).send({  errorMessage: `Invalid restaurant (or not supported): ${restaurant}` })
     }
   }
 })

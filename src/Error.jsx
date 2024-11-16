@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
-const Error = ({message}) => {
-    if (!message) return null
+const Error = ({messages}) => {
+    if (messages.length == 0) return null
 
-    return <p aria-invalid="true" className="error">{message}</p>
+    return messages.map(m => <p key={uuidv4()} aria-invalid="true" className="error">{m.message}</p>)
 }
 
 export default Error
