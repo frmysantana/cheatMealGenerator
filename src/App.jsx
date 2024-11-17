@@ -25,6 +25,7 @@ function App() {
     if (number < 100) {
       setErrors(appendNewError({
         type: "CALORIE_INPUT",
+        id: "calorie-bound-error",
         message: "Calorie limit must be at least 100."
       }))
     }
@@ -32,10 +33,11 @@ function App() {
     if (number > 2000) {
       setErrors(appendNewError({
         type: "CALORIE_INPUT",
+        id: "calorie-bound-error",
         message: "Calorie limit must be less than 2000."
       }))
-    } 
-    
+    }
+
     if (number >= 100 && number <= 2000) {
       setErrors(removeError('CALORIE_INPUT'))
     }
@@ -46,7 +48,7 @@ function App() {
   const handleRestaurantChange = (e) => {
     const restaurant = e.target.value;
     const isAvailableOption = Object.values(restaurantOptions).map(opt => opt.value).includes(restaurant)
-    
+
     if (isAvailableOption || restaurant == '') {
       setRestaurant(() => {
         return restaurant
@@ -58,6 +60,7 @@ function App() {
     } else {
       setErrors(appendNewError({
         type: "RESTAURANT_SELECTION",
+        id: "restaurant-error",
         message: 'Please select a supported restaurant.'
       }))
     }
@@ -69,11 +72,13 @@ function App() {
     if (!calorieLimit) {
       setErrors(appendNewError({
         type: "CALORIE_INPUT",
+        id: "calorie-bound-error",
         message: 'Please set a calorie limit between 100 and 2000 Calories.'
       }))
     } else if (!restaurant) {
       setErrors(appendNewError({
         type: "RESTAURANT_SELECTION",
+        id: "restaurant-error",
         message: 'Please select a supported restaurant.'
       }))
     } else {
@@ -85,7 +90,7 @@ function App() {
         }
         const res = await fetch(`http://localhost:3000/meals?restaurant=${restaurant}&limit=${calorieLimit}`, fetchConfig).catch(e => console.error(`fetch error: ${e.message}`))
         const data = await res.json()
-        
+
         if (!res.ok) {
           if (data.errorMessage.indexOf('Invalid restaurant (or not supported)') > -1) {
             setErrors(appendNewError({
@@ -103,15 +108,30 @@ function App() {
               calories: item.calories
             }
           })
-  
+
           setErrors(removeError('BACKEND_NOT_SUPPORTED'))
           setResults(dataWithKeys)
         }
       } catch (e) {
-        // TODO: write logger
-        console.error('try/catch error', {message: e.message})
+        console.error('try/catch error', { message: e.message })
       }
     }
+  }
+
+  const restaurantErrorProps = errors.filter(e => e.type == 'RESTAURANT_SELECTION').length == 1 ? {
+    ariaDescribedby: "restaurant-error",
+    ariaInvalid: "true"
+  } : {
+    ariaDescribedby: null,
+    ariaInvalid: null
+  }
+
+  const calorieBoundErrorProps = errors.filter(e => e.type == 'CALORIE_INPUT').length == 1 ? {
+    ariaDescribedby: "calorie-bound-error",
+    ariaInvalid: "true"
+  } : {
+    ariaDescribedby: null,
+    ariaInvalid: null
   }
 
   return (
@@ -125,14 +145,16 @@ function App() {
           <div className="input-row">
             <div className="input-container">
               <label htmlFor="restaurant">Restaurant</label>
-              <select onChange={handleRestaurantChange} id="restaurant" value={restaurant}>
+              <select onChange={handleRestaurantChange} id="restaurant" value={restaurant} aria-describedby={restaurantErrorProps.ariaDescribedby}
+                aria-invalid={restaurantErrorProps.ariaInvalid}>
                 <option value="">Select one</option>
                 {Object.values(restaurantOptions).map(restaurantConfig => <option key={uuidv4()} value={restaurantConfig.value}>{restaurantConfig.label}</option>)}
               </select>
             </div>
-            <div  className="input-container"> 
+            <div className="input-container">
               <label htmlFor="calorie-bound">Calorie Limit</label>
-              <input id="calorie-bound" type="number" min={100} max={2000}
+              <input id="calorie-bound" type="number" min={100} max={2000} aria-describedby={calorieBoundErrorProps.ariaDescribedby}
+                aria-invalid={calorieBoundErrorProps.ariaInvalid}
                 onChange={handleCalorieChange}
                 value={calorieLimit}
               />
@@ -164,13 +186,15 @@ export default App
  * X use path to set db location
  * X support multiple error messages
  * X show unsupported restaurant server error on frontend
- * ally error format
+ * X ally error format
+ * check with voiceover
+ * add tests
  * adjust folder structure
- * set veet as middleware between frontend and fastify???
+ * write logger
  * convert everything to typescript for teh lulz
  * change scrappers to run on cronjob
- * add tests
  * host???
+ * set veet as middleware between frontend and fastify???
  * 
  * 
  * 
