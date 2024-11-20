@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Results from './Results';
 import Error from './Error';
 import { v4 as uuidv4 } from 'uuid';
-import { restaurantOptions } from '../utils/constants';
+import { restaurantOptions } from '../../utils/constants';
 
 function App() {
   const [calorieLimit, setCalorieLimit] = useState(100);
