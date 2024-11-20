@@ -170,38 +170,3 @@ function App() {
 }
 
 export default App
-
-/**
- * TODO:
- * X try form actions - only canary version; would have to change versions X
- * X convert cheerio to jsdom X
- * X clean up TacoBell data X
- * X include other restaurants and add restaurant selector component
- * X - add Wendy's
- * X - add Burger King
- * X - add Popeye's
- * X - classes for scrappers?
- * X incorporate SQLite database and 
- * X - Drizzle for ORM? overkill - no need
- * X use path to set db location
- * X support multiple error messages
- * X show unsupported restaurant server error on frontend
- * X ally error format
- * check with voiceover
- * add tests
- * adjust folder structure
- * write logger
- * convert everything to typescript for teh lulz
- * change scrappers to run on cronjob
- * host???
- * set veet as middleware between frontend and fastify???
- * 
- * 
- * 
- * 
- * try re-implementing FE with svelte and then vue for experimenting
- * resolve punycode deprecation issue (maybe switch node to LTS?)
- * 
- * - authentication
- * - analyze menu from picture
- */
