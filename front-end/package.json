@@ -1,11 +1,10 @@
 {
-  "name": "cheat-meal-generator",
+  "name": "cheat-meal-generator-front-end",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "devFrontEnd": "vite",
-    "devBackEnd": "node --watch --experimental-vm-modules --experimental-sqlite ./server/src/server.js",
+    "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"

@@ -1,0 +1,16 @@
+{
+    "name": "cheat-meal-generator",
+    "version": "1.0.0",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "init": "cd ./back-end && npm i && cd ../front-end && npm i",
+      "setup": "node --experimental-sqlite ./back-end/src/scrappers/database.js",
+      "devBackEnd": "cd ./back-end && npm run dev",
+      "devFrontEnd": "cd ./front-end && npm run dev"
+    },
+    "author": "Fremy Santana",
+    "license": "ISC",
+    "description": "",
+    "type": "module"
+  }
+  
