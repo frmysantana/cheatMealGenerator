@@ -1,16 +1,31 @@
 {
-    "name": "cheat-meal-generator",
-    "version": "1.0.0",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "init": "cd ./back-end && npm i && cd ../front-end && npm i",
-      "setup": "node --experimental-sqlite ./back-end/src/scrappers/database.js",
-      "devBackEnd": "cd ./back-end && npm run dev",
-      "devFrontEnd": "cd ./front-end && npm run dev"
-    },
-    "author": "Fremy Santana",
-    "license": "ISC",
-    "description": "",
-    "type": "module"
-  }
-  
+  "name": "cheat-meal-generator",
+  "version": "1.0.0",
+  "main": "front-end/index.html",
+  "dependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init": "cd ./back-end && npm i && cd ../front-end && npm i",
+    "setup": "node --experimental-sqlite ./back-end/src/scrappers/database.js",
+    "dev": "concurrently --kill-others \"npm run runBackEnd\" \"npm run devFrontEnd\"",
+    "build": "concurrently --kill-others \"npm run runBackEnd\" \"npm run devFrontEnd\"",
+    "runBackEnd": "cd ./back-end && npm run run",
+    "devFrontEnd": "cd ./front-end && npm run dev",
+    "runFrontEnd": "cd ./front-end && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frmysantana/cheatMealGenerator.git"
+  },
+  "author": "Fremy Santana",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frmysantana/cheatMealGenerator/issues"
+  },
+  "homepage": "https://github.com/frmysantana/cheatMealGenerator#readme",
+  "description": "",
+  "type": "module"
+}

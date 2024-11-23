@@ -15,15 +15,13 @@ X show unsupported restaurant server error on frontend
 X ally error format
 check with voiceover
 add tests
-adjust folder structure
+X adjust folder structure
+X use pm2 to better orchestrate setup scripts? concurrently seems to get the job done
 write logger
 convert everything to typescript for teh lulz
 change scrappers to run on cronjob
 host???
 set veet as middleware between frontend and fastify???
-
-
-
 
 try re-implementing FE with svelte and then vue for experimenting
 resolve punycode deprecation issue (maybe switch node to LTS?)

@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:setup": "node --experimental-sqlite ./src/scrappers/database.js",
-    "dev": "node --watch --experimental-vm-modules --experimental-sqlite ./src/server.js"
+    "run": "node --watch --experimental-vm-modules --experimental-sqlite ./src/server.js"
   },
   "author": "Fremy Santana",
   "license": "ISC",
