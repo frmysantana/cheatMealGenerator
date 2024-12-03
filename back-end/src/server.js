@@ -12,6 +12,7 @@ await fastify.register(cors, {
   origin: [
     'http://localhost:5173', // development front-end
     'http://localhost:4173', // preview front-end
+    process.env.HOST
   ]
 })
 
@@ -69,7 +70,7 @@ fastify.route({
 
 // Run the server!
 try {
-  await fastify.listen({ port: 3000 })
+  await fastify.listen({ port: process.env.PORT || 3000 })
 } catch (err) {
   fastify.log.error(err)
   process.exit(1)
