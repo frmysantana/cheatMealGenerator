@@ -9,7 +9,10 @@ const fastify = Fastify({
 })
 
 await fastify.register(cors, { 
-  origin: 'http://localhost:5173',
+  origin: [
+    'http://localhost:5173', // development front-end
+    'http://localhost:4173', // preview front-end
+  ]
 })
 
 

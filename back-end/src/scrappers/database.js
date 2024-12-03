@@ -51,9 +51,6 @@ try {
 
   const insertStm = database.prepare('INSERT INTO foods (restaurant, name, calories) VALUES (?, ?, ?)');
   await insertFoods(insertStm);
-  const query = database.prepare(`SELECT * FROM foods`);
-  const items = query.all();
-  console.log({dbSize: items.length});
 } catch (e) {
   if (e.message != errors.ALREADY_EXISTS) {
     throw e

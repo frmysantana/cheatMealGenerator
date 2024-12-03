@@ -8,13 +8,14 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "init": "cd ./back-end && npm i && cd ../front-end && npm i",
+    "clean": "rm -rf ./node_modules && rm -rf ./back-end/node_modules && rm -rf ./back-end/src/scrappers/foods.db && rm -rf ./front-end/node_modules && rm -rf ./front-end/dist",
+    "init": "npm i && cd ./back-end && npm i && cd ../front-end && npm i",
     "setup": "node --experimental-sqlite ./back-end/src/scrappers/database.js",
     "dev": "concurrently --kill-others \"npm run runBackEnd\" \"npm run devFrontEnd\"",
-    "build": "concurrently --kill-others \"npm run runBackEnd\" \"npm run devFrontEnd\"",
+    "build": "npm run init && npm run setup && npm run frontEnd && npm run runBackEnd",
     "runBackEnd": "cd ./back-end && npm run run",
     "devFrontEnd": "cd ./front-end && npm run dev",
-    "runFrontEnd": "cd ./front-end && npm run build"
+    "frontEnd": "cd ./front-end && npm run build"
   },
   "repository": {
     "type": "git",
