@@ -12,7 +12,8 @@
     "init": "npm i && cd ./back-end && npm i && cd ../front-end && npm i",
     "setup": "node --experimental-sqlite ./back-end/src/scrappers/database.js",
     "dev": "concurrently --kill-others \"npm run runBackEnd\" \"npm run devFrontEnd\"",
-    "build": "npm run init && npm run setup && npm run frontEnd && npm run runBackEnd",
+    "build:local": "npm run init && npm run setup && npm run frontEnd && npm run runBackEnd",
+    "build": "npm run init && npm run setup && npm run frontEnd",
     "runBackEnd": "cd ./back-end && npm run run",
     "devFrontEnd": "cd ./front-end && npm run dev",
     "frontEnd": "cd ./front-end && npm run build"
