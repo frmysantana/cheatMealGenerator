@@ -17,7 +17,6 @@ await fastify.register(cors, {
     'http://127.0.0.1:3000',
     'http://localhost:5173', // development front-end
     'http://localhost:4173', // preview front-end
-    `${process.env.VITE_SERVER}`
   ]
 })
 
