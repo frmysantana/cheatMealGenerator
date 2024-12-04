@@ -88,7 +88,7 @@ function App() {
         const fetchConfig = {
           method: "GET",
         }
-        const url = import.meta.env.VITE_SERVER ? '' : 'http://localhost:3000';
+        const url = import.meta.env.VITE_LOCAL ? 'http://localhost:3000' : '';
         const res = await fetch(`${url}/meals?restaurant=${restaurant}&limit=${calorieLimit}`, fetchConfig).catch(e => console.error(`fetch error: ${e.message}`))
         const data = await res.json()
 
