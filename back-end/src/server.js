@@ -1,8 +1,12 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import fastifyStatic from '@fastify/static';
+import path from 'path';
 import meals from './meals.js';
 
 import { restaurantOptions } from '../../utils/constants.js';
+
+const distDir = path.join(process.cwd(), '../front-end/dist');
 
 const fastify = Fastify({
   logger: true
@@ -10,10 +14,15 @@ const fastify = Fastify({
 
 await fastify.register(cors, { 
   origin: [
+    'http://127.0.0.1:3000',
     'http://localhost:5173', // development front-end
     'http://localhost:4173', // preview front-end
     process.env.HOST
   ]
+})
+
+await fastify.register(fastifyStatic, {
+  root: distDir,
 })
 
 
